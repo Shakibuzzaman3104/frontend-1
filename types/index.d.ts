@@ -10,6 +10,7 @@ export type Movie = {
   columnId: Id;
   name: string;
   review: string;
+  movie?: any;
 };
 
 export interface KanbadContainerProps {
@@ -17,4 +18,5 @@ export interface KanbadContainerProps {
   children?: React.ReactNode;
   title?: string;
   movies: Movie[];
+  column?: Column;
 }
