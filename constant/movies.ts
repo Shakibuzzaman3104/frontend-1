@@ -24,7 +24,7 @@ export const defaultMovies: Movie[] = [
   },
   {
     id: 2,
-    columnId: "watchlist",
+    columnId: "watching",
     name: "Iron Man",
     review: "This is dummy review 2",
   },
@@ -36,7 +36,7 @@ export const defaultMovies: Movie[] = [
   },
   {
     id: 4,
-    columnId: "watchlist",
+    columnId: "watched",
     name: "Avatar",
     review: "This is dummy review 4",
   },

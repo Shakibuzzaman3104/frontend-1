@@ -16,6 +16,7 @@ export interface KanbadContainerProps {
   id: Id;
   children?: React.ReactNode;
   title?: string;
+  movies: Movie[];
 }
 
 export interface ITask {

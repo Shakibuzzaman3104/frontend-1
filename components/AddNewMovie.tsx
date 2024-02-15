@@ -3,7 +3,7 @@ import { generateId } from "@/utils/generateId.util";
 import { Modal } from "@mui/material";
 import { useForm } from "react-hook-form";
 
-const AddNewTask = ({ movies, setMovies, open, handleClose }: any) => {
+const AddNewMovie = ({ movies, setMovies, open, handleClose }: any) => {
   const {
     register,
     handleSubmit,
@@ -114,4 +114,4 @@ const AddNewTask = ({ movies, setMovies, open, handleClose }: any) => {
   );
 };
 
-export default AddNewTask;
+export default AddNewMovie;

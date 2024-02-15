@@ -8,7 +8,7 @@ import {
 } from "@dnd-kit/core";
 import { useState } from "react";
 
-import AddNewTask from "@/components/AddNewTask";
+import AddNewMovie from "@/components/AddNewMovie";
 import KarbanContainer from "@/components/KarbanContainer";
 import { defaultColumns, defaultMovies } from "@/constant/movies";
 import { Column, Movie } from "@/types";
@@ -51,12 +51,13 @@ const Kanban = () => {
                 key={column.id}
                 id={column.id}
                 title={column.title}
+                movies={movies.filter((m) => m.columnId === column.id)}
               ></KarbanContainer>
             ))}
           </div>
         </div>
       </div>
-      <AddNewTask
+      <AddNewMovie
         movies={movies}
         setMovies={setMovies}
         open={open}

@@ -31,3 +31,17 @@ body {
     text-wrap: balance;
   }
 }
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: rgba(213, 213, 213, 0.2);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: rgb(125, 125, 125);
+  border-radius: 20px;
+}
