@@ -34,14 +34,28 @@ const Kanban = () => {
 
   const dispatch = useDispatch();
   const movies = useSelector((state: any) => state.movies);
-  const [allMovies, setAllMovies] = useState<Movie[]>(movies);
+  const [filteredMovies, setFilteredMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
-    setAllMovies(movies);
-  }, [movies]);
+    if (!search) {
+      setFilteredMovies(movies);
+    }
+  }, [movies, search]);
+
+  const handleSearch = () => {
+    const filtered = movies.filter((movie: Movie) =>
+      movie.name.toLowerCase().includes(search.toLowerCase())
+    );
+    setFilteredMovies(filtered);
+  };
 
   useEffect(() => {
-    dispatch<any>(fetchMovies());
+    const storedMovies = localStorage.getItem("movies");
+    if (storedMovies) {
+      dispatch(setMovies(JSON.parse(storedMovies)));
+    } else {
+      dispatch<any>(fetchMovies());
+    }
   }, [dispatch]);
 
   const sensors = useSensors(
@@ -84,32 +98,42 @@ const Kanban = () => {
     const isOverAColumn = over.data.current?.type === "Column";
 
     if (isActiveMovie && isOverAColumn) {
-      const activeIndex = allMovies.findIndex((t: any) => t.id === activeId);
+      const activeIndex = filteredMovies.findIndex(
+        (t: any) => t.id === activeId
+      );
       const updatedMovies = [
-        ...allMovies.slice(0, activeIndex),
+        ...filteredMovies.slice(0, activeIndex),
         {
-          ...allMovies[activeIndex],
+          ...filteredMovies[activeIndex],
           columnId: overId,
         },
-        ...allMovies.slice(activeIndex + 1),
+        ...filteredMovies.slice(activeIndex + 1),
       ];
       dispatch(moveMovie({ id: activeId, columnId: overId }));
       return;
     }
 
     if (isActiveMovie && isOverMovie) {
-      const activeIndex = allMovies.findIndex((t: any) => t.id === activeId);
-      const overIndex = allMovies.findIndex((t: any) => t.id === overId);
+      const activeIndex = filteredMovies.findIndex(
+        (t: any) => t.id === activeId
+      );
+      const overIndex = filteredMovies.findIndex((t: any) => t.id === overId);
 
       // Check if the active movie is being moved within the same column
-      if (allMovies[activeIndex].columnId === allMovies[overIndex].columnId) {
+      if (
+        filteredMovies[activeIndex].columnId ===
+        filteredMovies[overIndex].columnId
+      ) {
         // Update the order of movies within the same column
-        const updatedMovies = arrayMove(allMovies, activeIndex, overIndex);
+        const updatedMovies = arrayMove(filteredMovies, activeIndex, overIndex);
         dispatch(setMovies(updatedMovies));
       } else {
         // Move the movie to another column
         dispatch(
-          moveMovie({ id: activeId, columnId: allMovies[overIndex].columnId })
+          moveMovie({
+            id: activeId,
+            columnId: filteredMovies[overIndex].columnId,
+          })
         );
       }
       return;
@@ -121,7 +145,11 @@ const Kanban = () => {
       <div className="flex flex-col bg-gray-400 p-12 lg:p-24 lg:pt-8 w-full min-h-full">
         <div className="flex flex-row justify-end w-full">
           <div className="flex w-[60%]">
-            <Search setSearch={setSearch} search={search} />
+            <Search
+              setSearch={setSearch}
+              search={search}
+              handleSearch={handleSearch}
+            />
           </div>
           <button
             className="bg-indigo-600 px-6 min-w-[120px] h-[45px] rounded-full ml-6 sm:ml-10 focus:outline-none outline-none"
@@ -137,7 +165,7 @@ const Kanban = () => {
           onDragOver={onDragOver}
         >
           <div className="mt-10">
-            <div className="grid grid-cols-3 gap-12 lg:gap-32">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-12 lg:gap-32">
               <SortableContext items={columnIds}>
                 {kanbanColumns.map((column, index) => (
                   <KarbanContainer
@@ -145,7 +173,7 @@ const Kanban = () => {
                     id={column.id}
                     column={column}
                     title={column.title}
-                    movies={allMovies.filter(
+                    movies={filteredMovies.filter(
                       (m: any) => m.columnId === column.id
                     )}
                   ></KarbanContainer>

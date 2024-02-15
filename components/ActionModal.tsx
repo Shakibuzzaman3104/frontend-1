@@ -12,6 +12,7 @@ const ActionModal = ({ open, handleClose, initialMovie }: any) => {
     register,
     handleSubmit,
     setError,
+    reset,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -49,6 +50,7 @@ const ActionModal = ({ open, handleClose, initialMovie }: any) => {
     } else {
       dispatch(addMovie(movieData));
     }
+    reset();
     handleClose();
   };
 

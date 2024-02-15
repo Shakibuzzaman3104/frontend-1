@@ -1,31 +1,34 @@
 import { Movie } from "@/types";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-const initialState: any = [];
+const initialState: Movie[] = [];
 
 const movieSlice = createSlice({
   name: "movie",
   initialState,
   reducers: {
-    addMovie: (state: any, action: PayloadAction<Movie>) => {
+    addMovie: (state, action: PayloadAction<Movie>) => {
       state.push(action.payload);
+      localStorage.setItem("movies", JSON.stringify(state));
     },
-    editMovie: (state, action) => {
+    editMovie: (state, action: PayloadAction<Movie>) => {
       const { id, name, review } = action.payload;
-      const movieIndex = state.findIndex((movie: Movie) => movie.id === id);
+      const movieIndex = state.findIndex((movie) => movie.id === id);
       if (movieIndex !== -1) {
         state[movieIndex].name = name;
         state[movieIndex].review = review;
+        localStorage.setItem("movies", JSON.stringify(state));
       }
     },
-    setMovies: (state, action) => {
+    setMovies: (state, action: PayloadAction<Movie[]>) => {
       return action.payload;
     },
     moveMovie: (state, action) => {
       const { id, columnId } = action.payload;
-      const movieIndex = state.findIndex((movie: Movie) => movie.id === id);
+      const movieIndex = state.findIndex((movie) => movie.id === id);
       if (movieIndex !== -1) {
         state[movieIndex].columnId = columnId;
+        localStorage.setItem("movies", JSON.stringify(state));
       }
     },
   },
