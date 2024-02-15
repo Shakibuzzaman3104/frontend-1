@@ -3,7 +3,6 @@ import Search from "@/components/Search";
 import {
   DndContext,
   DragOverEvent,
-  DragOverlay,
   DragStartEvent,
   PointerSensor,
   useSensor,
@@ -13,13 +12,12 @@ import { useEffect, useMemo, useState } from "react";
 
 import { moveMovie, setMovies } from "@/app/redux/slices/movie.slice";
 import ActionModal from "@/components/ActionModal";
+import DraggingOverlay from "@/components/DraggingOverlay";
 import KarbanContainer from "@/components/KarbanContainer";
-import MovieCard from "@/components/MovieCard";
 import { defaultColumns } from "@/constant/movies";
 import { Column, Movie } from "@/types";
 import { fetchMovies } from "@/utils/getMovies.util";
 import { SortableContext, arrayMove } from "@dnd-kit/sortable";
-import { createPortal } from "react-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 const Kanban = () => {
@@ -181,19 +179,7 @@ const Kanban = () => {
               </SortableContext>
             </div>
           </div>
-          {createPortal(
-            <DragOverlay>
-              {activeMovie && (
-                <MovieCard
-                  id={activeMovie.id}
-                  columnId={activeMovie.columnId}
-                  name={activeMovie.name}
-                  review={activeMovie.review}
-                />
-              )}
-            </DragOverlay>,
-            document.body
-          )}
+          {activeMovie && <DraggingOverlay activeMovie={activeMovie} />}
         </DndContext>
       </div>
       <ActionModal open={open} handleClose={handleClose} />
