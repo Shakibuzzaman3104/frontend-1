@@ -1,5 +1,6 @@
-import { KanbadContainerProps } from "@/types";
+import { KanbadContainerProps, Movie } from "@/types";
 import clsx from "clsx";
+import MovieCard from "./MovieCard";
 
 const KarbanContainer = ({
   id,
@@ -23,31 +24,8 @@ const KarbanContainer = ({
         <h1 className="text-black font-semibold">{title}</h1>
       </div>
       <div className="flex flex-col items-center justify-center space-y-8 p-2 overflow-y-auto pt-8">
-        {movies.map((movie: any) => (
-          <div
-            key={movie.id}
-            className={clsx(
-              "flex items-center w-full p-4 rounded-[6px]",
-              movie.columnId === "watchlist"
-                ? "bg-gray-200"
-                : movie.columnId === "watching"
-                ? "bg-purple-600"
-                : "bg-gray-400"
-            )}
-          >
-            <div
-              className={clsx(
-                "flex flex-col gap-1",
-                movie.columnId === "watching" ? "text-white" : "text-black"
-              )}
-            >
-              <p className="text-[14px]">Name: {movie.name}</p>
-              <p className="text-[12px]">Review: {movie.review}</p>
-            </div>
-            <button className="text-white text-xs px-2 bg-black rounded-sm py-[1px]">
-              Edit
-            </button>
-          </div>
+        {movies.map((movie: Movie) => (
+          <MovieCard {...movie} key={movie.id} />
         ))}
       </div>
     </div>
