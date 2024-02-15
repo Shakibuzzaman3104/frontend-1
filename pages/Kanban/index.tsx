@@ -6,18 +6,27 @@ import {
   useSensor,
   useSensors,
 } from "@dnd-kit/core";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
+import { fetchMovies } from "@/app/redux/slices/movie.slice";
 import AddNewMovie from "@/components/AddNewMovie";
 import KarbanContainer from "@/components/KarbanContainer";
-import { defaultColumns, defaultMovies } from "@/constant/movies";
-import { Column, Movie } from "@/types";
+import { defaultColumns } from "@/constant/movies";
+import { Column } from "@/types";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
+import { useDispatch, useSelector } from "react-redux";
 
 const Kanban = () => {
   const [search, setSearch] = useState("");
   const [kanbanColumns, setKanbanColumns] = useState<Column[]>(defaultColumns);
-  const [movies, setMovies] = useState<Movie[]>(defaultMovies);
+  const dispatch = useDispatch();
+
+  const movies = useSelector((state: any) => state.movies);
+  console.log("movies", movies);
+
+  useEffect(() => {
+    dispatch<any>(fetchMovies());
+  }, [dispatch]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -51,18 +60,13 @@ const Kanban = () => {
                 key={column.id}
                 id={column.id}
                 title={column.title}
-                movies={movies.filter((m) => m.columnId === column.id)}
+                movies={movies.filter((m: any) => m.columnId === column.id)}
               ></KarbanContainer>
             ))}
           </div>
         </div>
       </div>
-      <AddNewMovie
-        movies={movies}
-        setMovies={setMovies}
-        open={open}
-        handleClose={handleClose}
-      />
+      <AddNewMovie movies={movies} open={open} handleClose={handleClose} />
     </>
   );
 };

@@ -1,9 +1,13 @@
+import { addMovie } from "@/app/redux/slices/movie.slice";
 import { Movie } from "@/types";
 import { generateId } from "@/utils/generateId.util";
 import { Modal } from "@mui/material";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
-const AddNewMovie = ({ movies, setMovies, open, handleClose }: any) => {
+const AddNewMovie = ({ open, handleClose }: any) => {
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -40,9 +44,8 @@ const AddNewMovie = ({ movies, setMovies, open, handleClose }: any) => {
       columnId: "watchlist",
     };
 
-    setMovies([...movies, newMovie]);
+    dispatch(addMovie(newMovie));
     handleClose();
-    console.log(newMovie);
   };
 
   return (

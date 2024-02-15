@@ -18,9 +18,3 @@ export interface KanbadContainerProps {
   title?: string;
   movies: Movie[];
 }
-
-export interface ITask {
-  id: UniqueIdentifier;
-  title: string;
-  review: string;
-}

@@ -23,7 +23,7 @@ const KarbanContainer = ({
       <div className="flex items-center justify-center">
         <h1 className="text-black font-semibold">{title}</h1>
       </div>
-      <div className="flex flex-col items-center justify-center space-y-8 p-2 overflow-y-auto pt-8">
+      <div className="flex flex-col items-center justify-center space-y-8 p-2 overflow-y-auto">
         {movies.map((movie: Movie) => (
           <MovieCard {...movie} key={movie.id} />
         ))}
