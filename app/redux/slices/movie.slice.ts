@@ -21,8 +21,15 @@ const movieSlice = createSlice({
     setMovies: (state, action) => {
       return action.payload;
     },
+    moveMovie: (state, action) => {
+      const { id, columnId } = action.payload;
+      const movieIndex = state.findIndex((movie: Movie) => movie.id === id);
+      if (movieIndex !== -1) {
+        state[movieIndex].columnId = columnId;
+      }
+    },
   },
 });
 
-export const { addMovie, setMovies, editMovie } = movieSlice.actions;
+export const { addMovie, setMovies, editMovie, moveMovie } = movieSlice.actions;
 export default movieSlice.reducer;

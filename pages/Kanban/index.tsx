@@ -11,6 +11,7 @@ import {
 } from "@dnd-kit/core";
 import { useEffect, useMemo, useState } from "react";
 
+import { moveMovie, setMovies } from "@/app/redux/slices/movie.slice";
 import ActionModal from "@/components/ActionModal";
 import KarbanContainer from "@/components/KarbanContainer";
 import MovieCard from "@/components/MovieCard";
@@ -81,31 +82,37 @@ const Kanban = () => {
     if (!isActiveMovie) return;
 
     const isOverAColumn = over.data.current?.type === "Column";
-    console.log(isOverAColumn);
 
-    // Im dropping a Task over a column
     if (isActiveMovie && isOverAColumn) {
-      setAllMovies((movies: any) => {
-        const activeIndex = movies.findIndex((t: any) => t.id === activeId);
-
-        movies[activeIndex].columnId = overId;
-        console.log("DROPPING TASK OVER COLUMN", { activeIndex });
-        return arrayMove(movies, activeIndex, activeIndex);
-      });
+      const activeIndex = allMovies.findIndex((t: any) => t.id === activeId);
+      const updatedMovies = [
+        ...allMovies.slice(0, activeIndex),
+        {
+          ...allMovies[activeIndex],
+          columnId: overId,
+        },
+        ...allMovies.slice(activeIndex + 1),
+      ];
+      dispatch(moveMovie({ id: activeId, columnId: overId }));
+      return;
     }
-    // Im dropping a Task over another Task
+
     if (isActiveMovie && isOverMovie) {
-      setAllMovies((movies: any) => {
-        const activeIndex = movies.findIndex((t: any) => t.id === activeId);
-        const overIndex = movies.findIndex((t: any) => t.id === overId);
+      const activeIndex = allMovies.findIndex((t: any) => t.id === activeId);
+      const overIndex = allMovies.findIndex((t: any) => t.id === overId);
 
-        if (movies[activeIndex].columnId != movies[overIndex].columnId) {
-          movies[activeIndex].columnId = movies[overIndex].columnId;
-          return arrayMove(movies, activeIndex, overIndex - 1);
-        }
-
-        return arrayMove(movies, activeIndex, overIndex);
-      });
+      // Check if the active movie is being moved within the same column
+      if (allMovies[activeIndex].columnId === allMovies[overIndex].columnId) {
+        // Update the order of movies within the same column
+        const updatedMovies = arrayMove(allMovies, activeIndex, overIndex);
+        dispatch(setMovies(updatedMovies));
+      } else {
+        // Move the movie to another column
+        dispatch(
+          moveMovie({ id: activeId, columnId: allMovies[overIndex].columnId })
+        );
+      }
+      return;
     }
   }
 
