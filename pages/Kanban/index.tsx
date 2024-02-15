@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from "react";
 
 import { fetchMovies } from "@/app/redux/slices/movie.slice";
-import AddNewMovie from "@/components/AddNewMovie";
+import ActionModal from "@/components/ActionModal";
 import KarbanContainer from "@/components/KarbanContainer";
 import { defaultColumns } from "@/constant/movies";
 import { Column } from "@/types";
@@ -22,7 +22,6 @@ const Kanban = () => {
   const dispatch = useDispatch();
 
   const movies = useSelector((state: any) => state.movies);
-  console.log("movies", movies);
 
   useEffect(() => {
     dispatch<any>(fetchMovies());
@@ -66,7 +65,7 @@ const Kanban = () => {
           </div>
         </div>
       </div>
-      <AddNewMovie movies={movies} open={open} handleClose={handleClose} />
+      <ActionModal open={open} handleClose={handleClose} />
     </>
   );
 };

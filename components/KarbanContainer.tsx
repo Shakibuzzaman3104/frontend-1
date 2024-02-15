@@ -8,7 +8,6 @@ const KarbanContainer = ({
   title,
   movies,
 }: KanbadContainerProps) => {
-  console.log(movies);
   return (
     <div
       className={clsx(

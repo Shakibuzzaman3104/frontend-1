@@ -10,13 +10,21 @@ const movieSlice = createSlice({
     addMovie: (state: any, action: PayloadAction<Movie>) => {
       state.push(action.payload);
     },
+    editMovie: (state, action) => {
+      const { id, name, review } = action.payload;
+      const movieIndex = state.findIndex((movie: Movie) => movie.id === id);
+      if (movieIndex !== -1) {
+        state[movieIndex].name = name;
+        state[movieIndex].review = review;
+      }
+    },
     setMovies: (state, action) => {
       return action.payload;
     },
   },
 });
 
-export const { addMovie, setMovies } = movieSlice.actions;
+export const { addMovie, setMovies, editMovie } = movieSlice.actions;
 export default movieSlice.reducer;
 
 export const fetchMovies = (): any => async (dispatch: any) => {
