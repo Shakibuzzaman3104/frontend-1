@@ -9,7 +9,7 @@ const Search = ({ setSearch, search }: any) => {
         placeholder="Type here..."
         onChange={handleSearch}
         value={search}
-        className="bg-white px-4 py-3 rounded-md h-[45px] w-full sm:w-[90%] focus:border-none focus:outline-none outline:none text-black"
+        className="bg-white px-4 py-3 rounded-md h-[45px] w-full sm:w-[90%] focus:border-none focus:outline-none outline-none text-black"
       />
       <button className="bg-white px-6 h-[45px] rounded-md text-black">
         Search
